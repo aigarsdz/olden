@@ -19,11 +19,13 @@ const vm = new Vue({
 
   data: {
     clipboardContent: [],
+    searchResults: [],
     lastClipboardItem: '',
     clipboardItemCount: 0,
     selectionIndex: -1,
-    filter: '',
-    currentPage: 0
+    query: '',
+    currentPage: 0,
+    currentSearchPage: 0
   },
 
   methods: {
@@ -145,7 +147,7 @@ const vm = new Vue({
         this.lastClipboardItem = '';
         this.clipboardItemCount = 0;
         this.selectionIndex = -1;
-        this.filter = '';
+        this.query = '';
 
         this.openPage(0);
       });
@@ -153,6 +155,19 @@ const vm = new Vue({
   }
 });
 
-vm.$watch('filter', (value) => {
-  console.log(value);
+vm.$watch('query', (value) => {
+  if (value.length > 0) {
+    db.items
+      .where('text').startsWithIgnoreCase(value)
+      .reverse()
+      .offset(9 * vm.currentSearchPage)
+      .limit(9)
+      .sortBy('id')
+      .then((items) => {
+        items.forEach((item) => vm.searchResults.push(item.text));
+      });
+  } else {
+    vm.searchResults = [];
+    vm.currentSearchPage = 0;
+  }
 });

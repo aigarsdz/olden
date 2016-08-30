@@ -12,21 +12,43 @@
 
     <main id="app">
       <img src="./img/ic_search_white_24px.svg" alt="Search">
-      <input type="text" v-model="filter">
-      <div v-for="(index, item) in clipboardContent"
-           v-bind:class="{ selected: index == selectionIndex }">{{item}}</div>
-      <div class="pagination">
-        <div>
-          <img src="./img/ic_keyboard_arrow_left_black_24px.svg"
-               alt="Navigate back"
-               v-show="currentPage > 0"
-               v-on:click="openPage(currentPage - 1)">
+      <input type="text" v-model="query" autofocus>
+
+      <div v-if="searchResults.length === 0">
+        <div v-for="(index, item) in clipboardContent"
+            v-bind:class="{ selected: index == selectionIndex }">{{item}}</div>
+        <div class="pagination">
+          <div>
+            <img src="./img/ic_keyboard_arrow_left_black_24px.svg"
+                alt="Navigate back"
+                v-show="currentPage > 0"
+                v-on:click="openPage(currentPage - 1)">
+          </div>
+          <div>
+            <img src="./img/ic_keyboard_arrow_right_black_24px.svg"
+                alt="Navigate right"
+                v-show="clipboardItemCount > 9 && (Math.ceil(clipboardItemCount / 9)) > currentPage + 1"
+                v-on:click="openPage(currentPage + 1)">
+          </div>
         </div>
-        <div>
-          <img src="./img/ic_keyboard_arrow_right_black_24px.svg"
-               alt="Navigate right"
-               v-show="clipboardItemCount > 9 && (Math.ceil(clipboardItemCount / 9)) > currentPage + 1"
-               v-on:click="openPage(currentPage + 1)">
+      </div>
+
+      <div v-else>
+        <div v-for="(index, item) in searchResults"
+            v-bind:class="{ selected: index == selectionIndex }">{{item}}</div>
+        <div class="pagination">
+          <div>
+            <img src="./img/ic_keyboard_arrow_left_black_24px.svg"
+                alt="Navigate back"
+                v-show="currentSearchPage > 0"
+                v-on:click="openPage(currentSearchPage - 1)">
+          </div>
+          <div>
+            <img src="./img/ic_keyboard_arrow_right_black_24px.svg"
+                alt="Navigate right"
+                v-show="searchResults.length > 9 && (Math.ceil(searchResults.length / 9)) > currentSearchPage + 1"
+                v-on:click="openPage(currentSearchPage + 1)">
+          </div>
         </div>
       </div>
     </main>

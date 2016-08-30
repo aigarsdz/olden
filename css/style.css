@@ -45,7 +45,7 @@ main > input {
   font-size: .8rem;
 }
 
-main > div {
+main > div > div {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,7 +54,7 @@ main > div {
   border-top: 1px dotted #1C1F26;
 }
 
-main > div.selected {
+main > div > div.selected {
   background-color: #668A6F;
 }
 
