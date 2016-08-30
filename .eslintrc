@@ -1,0 +1,17 @@
+{
+  // http://eslint.org/docs/rules/
+
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+
+  "env": {
+    "browser": true,     // browser global variables.
+    "node":    true,     // Node.js global variables and Node.js-specific rules.
+    "amd":     false,    // defines require() and define() as global variables as per the amd spec.
+    "mocha":   false     // adds all of the Mocha testing global variables.
+  },
+
+  "globals": {}
+}

@@ -1,0 +1,20 @@
+{
+  "name": "brownie",
+  "description": "Cross-platform clipboard manager",
+  "main": "./main.js",
+  "authors": [
+    "Aigars Dzerviniks <aigarsdz@protonmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "^1.0.26"
+  }
+}

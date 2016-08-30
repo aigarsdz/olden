@@ -1,0 +1,81 @@
+/*
+  Global styles
+*/
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+html,
+body,
+main {
+  height: 100%;
+}
+
+body {
+  background-color: #2B2F3B;
+  color: #BDBFC2;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .8rem;
+}
+
+/*
+  Index page styles.
+*/
+main {
+  overflow: hidden;
+}
+
+main > img {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+}
+
+main > input {
+  width: 100%;
+  height: 36px;
+  background-color: #1C1F26;
+  border: none;
+  outline: none;
+  color: #BDBFC2;
+  padding: 0 10px 0 42px;
+  font-size: .8rem;
+}
+
+main > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+  height: 36px;
+  border-top: 1px dotted #1C1F26;
+}
+
+main > div.selected {
+  background-color: #668A6F;
+}
+
+.pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.pagination > div {
+  width: 50%;
+  float: left;
+  padding: 6px 10px 0;
+}
+
+.pagination > div:last-child {
+  text-align: right;
+}
+
+.pagination img {
+  cursor: pointer;
+}
