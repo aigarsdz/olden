@@ -13,7 +13,9 @@ let mainWindow = null;
 let tray       = null;
 let visible    = false;
 
-app.dock.hide();
+if (app.dock) {
+  app.dock.hide();
+}
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
