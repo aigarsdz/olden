@@ -5,3 +5,4 @@ node_modules
 app/package.json
 app/js/vue.min.js
 .vscode
+dist/Olden-*
