@@ -12,3 +12,5 @@ my own clipboard manager that would work on every platform I might end up workin
 
 Olden is built using the amazing Electron package from GitHub and while still in develpment it has
 not only become an important tool for me on Windows but also replaced CopyClip on MacOS.
+
+![Olden preview](https://raw.githubusercontent.com/aigarsdz/olden/master/assets/screenshots/Screen%20Shot%202016-09-09%20at%202.25.07%20AM.png)
