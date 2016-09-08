@@ -206,7 +206,7 @@ const vm = new Vue({
       setInterval(() => {
         const clipboardText = clipboard.readText();
 
-        if (clipboardText != this.lastClipboardItem) {
+        if (clipboardText.length > 0 && clipboardText != this.lastClipboardItem) {
           // Delete the item if it's already in the clipboard to avoid extra checks.
           db.items.where('text').equals(clipboardText).delete()
             .then((count) => {

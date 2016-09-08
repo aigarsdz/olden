@@ -38,7 +38,7 @@ app.on('ready', () => {
     visible = !visible;
   });
 
-  tray = new Tray('./img/cookie.png');
+  tray = new Tray('./img/owl_full_black_18.png');
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Clear clipboard history', click(item, focusedWindow) {
