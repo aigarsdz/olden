@@ -11,7 +11,6 @@ const {
 
 let mainWindow = null;
 let tray       = null;
-let visible    = false;
 
 // Hide the icon from the dock if the OS has it.
 if (app.dock) {
@@ -22,20 +21,19 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     frame: false,
     height: 396,
-    resizable: false,
     width: 300,
+    backgroundColor: '#2B2F3B',
+    resizable: false,
     center: true,
     skipTaskbar: true,
-    show: visible,
+    show: false,
     title: 'Brownie'
   });
 
   // The trigger used to show/hide the app window.
   // TODO: allow user to set a custom shortcut.
   globalShortcut.register('Alt+Space', () => {
-    visible ? mainWindow.hide() : mainWindow.show();
-
-    visible = !visible;
+    mainWindow.isVisible() ? app.hide() : mainWindow.show();
   });
 
   tray = new Tray('./img/owl_full_black_18.png');
@@ -57,11 +55,7 @@ app.on('ready', () => {
   mainWindow.setVisibleOnAllWorkspaces(true);
   mainWindow.webContents.openDevTools();
 
-  ipcMain.on('hideWindow', (event) => {
-    mainWindow.hide();
-
-    visible = false;
-  });
+  ipcMain.on('hideWindow', (event) => app.hide());
 });
 
 // Quit when all windows are closed.
