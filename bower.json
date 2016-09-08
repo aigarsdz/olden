@@ -1,7 +1,6 @@
 {
   "name": "brownie",
   "description": "Cross-platform clipboard manager",
-  "main": "./main.js",
   "authors": [
     "Aigars Dzerviniks <aigarsdz@protonmail.com>"
   ],

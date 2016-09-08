@@ -9,6 +9,8 @@ const {
   ipcMain,
   clipboard } = require('electron');
 
+const path = require('path');
+
 let mainWindow = null;
 let tray       = null;
 
@@ -49,7 +51,7 @@ app.on('ready', () => {
     }
   });
 
-  tray = new Tray('./img/owl_full_black_18.png');
+  tray = new Tray(path.join(__dirname, 'img', 'owl_black_18.png'));
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Clear clipboard history', click(item, focusedWindow) {

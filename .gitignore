@@ -2,3 +2,6 @@ bower_components
 node_modules
 .DS_Store
 *.log*
+app/package.json
+app/js/vue.min.js
+.vscode

@@ -1,9 +1,10 @@
 {
   "name": "brownie",
   "version": "0.0.1",
-  "main": "./main.js",
+  "main": "./app/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron app",
+    "build": "node scripts/build.js && npm install --prefix ./app"
   },
   "dependencies": {
     "dexie": "^1.4.1"
