@@ -33,7 +33,20 @@ app.on('ready', () => {
   // The trigger used to show/hide the app window.
   // TODO: allow user to set a custom shortcut.
   globalShortcut.register('Alt+Space', () => {
-    mainWindow.isVisible() ? app.hide() : mainWindow.show();
+    if (mainWindow.isVisible()) {
+      if (app.hide) {
+        // NOTE: to get focus back to the previous window on MacOS we need to
+        // hide the app not only the window.
+        app.hide();
+      } else {
+        // NOTE: Windows doesn't have app.hide method, but combination of
+        // window.blur and window.hide does the same thing.
+        mainWindow.blur();
+        mainWindow.hide()
+      }
+    } else {
+      mainWindow.show();
+    }
   });
 
   tray = new Tray('./img/owl_full_black_18.png');
@@ -53,14 +66,21 @@ app.on('ready', () => {
 
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.setVisibleOnAllWorkspaces(true);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
-  ipcMain.on('hideWindow', (event) => app.hide());
+  ipcMain.on('hideWindow', (event) => {
+    if (app.hide) {
+        app.hide();
+      } else {
+        mainWindow.blur();
+        mainWindow.hide()
+      }
+  });
 });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
+  // On MacOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit();
