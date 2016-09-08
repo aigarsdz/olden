@@ -58,12 +58,12 @@ app.on('ready', () => {
       mainWindow.webContents.send('clearClipboardHistory');
     }},
     { type: 'separator' },
-    { label: 'Quit Brownie', click(item, focusedWindow) {
+    { label: 'Quit Olden', click(item, focusedWindow) {
       app.quit();
     }}
   ]);
 
-  tray.setToolTip('Brownie')
+  tray.setToolTip('Olden')
   tray.setContextMenu(contextMenu)
 
   mainWindow.loadURL('file://' + __dirname + '/index.html');
