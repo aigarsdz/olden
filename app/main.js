@@ -51,7 +51,7 @@ app.on('ready', () => {
     }
   });
 
-  tray = new Tray(path.join(__dirname, 'img', 'owl_black_18.png'));
+  tray = new Tray(path.join(__dirname, 'img', 'tray_icon_black_18.png'));
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Clear clipboard history', click(item, focusedWindow) {
