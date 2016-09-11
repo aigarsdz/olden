@@ -9,5 +9,6 @@ packageInfo.main = './main.js';
 packageInfo.scripts.start = 'electron .';
 
 delete packageInfo.scripts.build;
+delete packageInfo.devDependencies;
 
 fs.writeFile(path.join(__dirname, '..', 'app', 'package.json'), JSON.stringify(packageInfo));
