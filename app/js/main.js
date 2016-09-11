@@ -1,6 +1,6 @@
 const {ipcRenderer, clipboard} = require('electron');
 const path                     = require('path');
-const packageInfo              = require(path.join(__dirname, '..', 'package.json'));
+const packageInfo              = require(path.join(__dirname, 'package.json'));
 
 const KEY_DEL   = 8;
 const KEY_ENTER = 13;
