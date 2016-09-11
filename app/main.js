@@ -7,12 +7,15 @@ const {
   BrowserWindow,
   globalShortcut,
   ipcMain,
-  clipboard } = require('electron');
+  clipboard,
+  dialog,
+  shell } = require('electron');
 
 const path = require('path');
 
-let mainWindow = null;
-let tray       = null;
+let mainWindow    = null;
+let tray          = null;
+let updateOffered = false;
 
 // Hide the icon from the dock if the OS has it.
 if (app.dock) {
@@ -78,6 +81,24 @@ app.on('ready', () => {
         mainWindow.blur();
         mainWindow.hide()
       }
+  });
+
+  ipcMain.on('offer-update', (event, data) => {
+    if (!updateOffered) {
+      dialog.showMessageBox({
+        type:      'question',
+        buttons:   [ 'Cancel', 'Download' ],
+        defaultId: 0,
+        title:     'A newer version of Olden is available',
+        message:   'Would you like to download the update?'
+      }, (response) => {
+        if (response === 1) {
+          shell.openExternal(data.url);
+        }
+
+        updateOffered = true;
+      });
+    }
   });
 });
 

@@ -1,4 +1,6 @@
-const {ipcRenderer, clipboard} = require("electron");
+const {ipcRenderer, clipboard} = require('electron');
+const path                     = require('path');
+const packageInfo              = require(path.join(__dirname, '..', 'package.json'));
 
 const KEY_DEL   = 8;
 const KEY_ENTER = 13;
@@ -187,6 +189,20 @@ const vm = new Vue({
    * Initializes the application.
    */
   ready() {
+    // Query GitHub to see if a new version of Olden is available.
+    // TODO: implement autoupdater!
+    fetch('https://api.github.com/repos/electron/electron/releases/latest')
+      .then((response) => { return response.json() })
+      .then((data) => {
+        if (data.tag_name && data.tag_name != `v${packageInfo.version}`) {
+          data.assets.forEach((asset) => {
+            if (asset.indexOf('.dmg') !== -1) {
+              ipcRenderer.send('offer-update', { url: asset.browser_download_url });
+            }
+          });
+        }
+      }).catch((err) => console.log(err));
+
     document.addEventListener('keydown', (e) => {
       if (keyActionMap[e.keyCode]) {
         this[keyActionMap[e.keyCode]]();
