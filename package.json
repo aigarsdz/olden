@@ -7,7 +7,7 @@
     "build": "node scripts/build.js && npm install --prefix ./app",
     "package_macos": "node scripts/package_macos.js",
     "package_win": "node scripts/package_windows.js",
-    "bootstrap": "npm i -g electron-prebuilt && npm i --only=dev"
+    "bootstrap": "npm i -g electron-prebuilt bower && npm i --only=dev"
   },
   "dependencies": {
     "dexie": "^1.4.1"
