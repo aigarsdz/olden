@@ -37,13 +37,20 @@ You will have to have Node and NPM installed in order to develop Olden.
 
 In most of Node projects you can just run `npm i` to install all the dependencies, but the
 project structure of Olden is a bit more complicated and it uses 2 package.json files, therefore,
-to set up all the pependencies in the correct way, run `npm run bootstrap`. It will install
-[electron-prebuilt](https://github.com/electron-userland/electron-prebuilt "electron-userland/electron-prebuilt: Install precompiled versions of Electron using npm") globally, so you could use `electron` command-line utility (it's also required by
-`npm start`), and [appdmg](https://github.com/LinusU/node-appdmg "LinusU/node-appdmg: Generate your app dmgs"),
-[archiver](https://github.com/archiverjs/node-archiver "archiverjs/node-archiver: a streaming interface for archive generation"), [electron-packager](https://github.com/electron-userland/electron-packager "electron-userland/electron-packager: Package and distribute your Electron app with OS-specific bundles (.app, .exe etc) via JS or CLI") and
-[rimraf](https://github.com/isaacs/rimraf "isaacs/rimraf: A `rm -rf` util for nodejs") locally as development
-dependencies. After that run `bower install` to install [Vue.js](https://vuejs.org "vue.js"), which is used for rendering.
+to set everything up in the correct way, run `npm run bootstrap`. After that run `bower install`
+to install [Vue.js](https://vuejs.org "vue.js"), which is used for rendering.
 
 When you're done making your changes to the project, run `npm run build` to copy all the necessary
 files to the app folder. App packaging is done using npm run `package_macos` for MacOS and
 `npm package_win` for Windows.
+
+### Node dependencies
+
+- [bower](https://github.com/bower/bower "bower/bower: A package manager for the web")
+- [electron](https://github.com/electron/electron "electron/electron: Build cross platform desktop apps with JavaScript, HTML, and CSS")
+- [appdmg](https://github.com/LinusU/node-appdmg "LinusU/node-appdmg: Generate your app dmgs")
+- [archiver](https://github.com/archiverjs/node-archiver "archiverjs/node-archiver: a streaming interface for archive generation")
+- [electron-packager](https://github.com/electron-userland/electron-packager "electron-userland/electron-packager: Package and distribute your Electron app with OS-specific bundles (.app, .exe etc) via JS or CLI")
+- [rimraf](https://github.com/isaacs/rimraf "isaacs/rimraf: A `rm -rf` util for nodejs")
+- [mocha](https://github.com/mochajs/mocha "mochajs/mocha: simple, flexible, fun javascript test framework for node.js & the browser")
+- [spectron](https://github.com/electron/spectron "electron/spectron: Test Electron apps using ChromeDriver")
