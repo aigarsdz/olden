@@ -34,6 +34,7 @@ const vm = new Vue({
     searchResults:      [],
     lastClipboardItem:  '',
     clipboardItemCount: 0,
+    searchItemCount:    0,
     selectionIndex:     -1,
     query:              '',
     currentPage:        0,
@@ -288,6 +289,10 @@ const vm = new Vue({
 
 vm.$watch('query', (value) => {
   if (value.length > 0) {
+    db.items.where('text').startsWithIgnoreCase(value).count((count) => {
+      vm.searchItemCount = count;
+    });
+
     db.items
       .where('text').startsWithIgnoreCase(value)
       .reverse()

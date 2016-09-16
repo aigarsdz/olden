@@ -46,7 +46,7 @@
           <div>
             <img src="./img/ic_keyboard_arrow_right_black_24px.svg"
                 alt="Navigate right"
-                v-show="searchResults.length > 9 && (Math.ceil(searchResults.length / 9)) > currentSearchPage + 1"
+                v-show="searchItemCount > 9 && (Math.ceil(searchItemCount / 9)) > currentSearchPage + 1"
                 v-on:click="openPage(currentSearchPage + 1)">
           </div>
         </div>
