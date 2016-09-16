@@ -155,6 +155,7 @@ const vm = new Vue({
      * selection is moved to the bottom of the list.
      */
     selectPrevious() {
+      console.log(this.query);
       if (this.selectionIndex === 0) {
         this.selectionIndex = this.clipboardContent.length - 1;
       } else {
@@ -185,20 +186,43 @@ const vm = new Vue({
     }
   },
 
+  offerMacOSUpdate(updateUrl) {
+    if (process.platform === 'darwin' && updateUrl.indexOf('.dmg') !== -1) {
+      ipcRenderer.send('offer-update', { url: updateUrl });
+    }
+  },
+
+  offerWin64Update(updateUrl) {
+    if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'AMD64' &&
+        updateUrl.indexOf('x64') !== -1) {
+
+      ipcRenderer.send('offer-update', { url: updateUrl });
+    }
+  },
+
+  offerWin32Update(updateUrl) {
+    if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'x86' &&
+        updateUrl.indexOf('ia32') !== -1) {
+
+      ipcRenderer.send('offer-update', { url: updateUrl });
+    }
+  },
+
   /**
    * Initializes the application.
    */
   ready() {
     // Query GitHub to see if a new version of Olden is available.
     // TODO: implement autoupdater!
-    fetch('https://api.github.com/repos/electron/electron/releases/latest')
+    fetch('https://api.github.com/repos/aigarsdz/olden/releases/latest')
       .then((response) => { return response.json() })
       .then((data) => {
+          console.log(data);
         if (data.tag_name && data.tag_name != `v${packageInfo.version}`) {
           data.assets.forEach((asset) => {
-            if (asset.indexOf('.dmg') !== -1) {
-              ipcRenderer.send('offer-update', { url: asset.browser_download_url });
-            }
+            this.offerMacOSUpdate(asset.browser_download_url);
+            this.offerWin64Update(asset.browser_download_url);
+            this.offerWin32Update(asset.browser_download_url);
           });
         }
       }).catch((err) => console.log(err));
