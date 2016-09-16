@@ -149,8 +149,13 @@ const vm = new Vue({
      * if we are on the first page already.
      */
     openPreviousPage() {
-      if (this.currentPage > 0) {
-        this.openPage(this.currentPage - 1);
+      if (this.query.length === 0) {
+        if (this.currentPage > 0) {
+          this.openPage(this.currentPage - 1);
+        }
+      } else {
+        this.currentSearchPage--;
+        this.searchClipboard(this.query);
       }
     },
 
@@ -171,8 +176,13 @@ const vm = new Vue({
      * if we are on the last page already.
      */
     openNextPage() {
-      if ((Math.ceil(this.clipboardItemCount / 9)) > this.currentPage + 1) {
-        this.openPage(this.currentPage + 1);
+      if (this.query.length === 0) {
+        if ((Math.ceil(this.clipboardItemCount / 9)) > this.currentPage + 1) {
+          this.openPage(this.currentPage + 1);
+        }
+      } else {
+        this.currentSearchPage++;
+        this.searchClipboard(this.query);
       }
     },
 
@@ -186,29 +196,72 @@ const vm = new Vue({
       } else {
         this.selectionIndex++;
       }
-    }
-  },
+    },
 
-  offerMacOSUpdate(updateUrl) {
-    if (process.platform === 'darwin' && updateUrl.indexOf('.dmg') !== -1) {
-      ipcRenderer.send('offer-update', { url: updateUrl });
-    }
-  },
+    /**
+     * Checks if the app is running on MacOS and the asset points to a DMG archive
+     * and offers to download a MacOS update if the comdisions are met.
+     *
+     * @param {String} updateUrl
+     */
+    offerMacOSUpdate(updateUrl) {
+      if (process.platform === 'darwin' && updateUrl.indexOf('.dmg') !== -1) {
+        ipcRenderer.send('offer-update', { url: updateUrl });
+      }
+    },
 
-  offerWin64Update(updateUrl) {
-    if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'AMD64' &&
-        updateUrl.indexOf('x64') !== -1) {
+    /**
+     * Checks if the app is running on 64bit Windows and the asset points to a
+     * 64bit ZIP archive and offers to download a 64bit Windows update if the
+     * comdisions are met.
+     *
+     * @param {String} updateUrl
+     */
+    offerWin64Update(updateUrl) {
+      if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'AMD64' &&
+          updateUrl.indexOf('x64') !== -1) {
 
-      ipcRenderer.send('offer-update', { url: updateUrl });
-    }
-  },
+        ipcRenderer.send('offer-update', { url: updateUrl });
+      }
+    },
 
-  offerWin32Update(updateUrl) {
-    if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'x86' &&
-        updateUrl.indexOf('ia32') !== -1) {
+    /**
+     * Checks if the app is running on 32bit Windows and the asset points to a
+     * 32bit ZIP archive and offers to download a 32bit Windows update if the
+     * comdisions are met.
+     *
+     * @param {String} updateUrl
+     */
+    offerWin32Update(updateUrl) {
+      if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'x86' &&
+          updateUrl.indexOf('ia32') !== -1) {
 
-      ipcRenderer.send('offer-update', { url: updateUrl });
-    }
+        ipcRenderer.send('offer-update', { url: updateUrl });
+      }
+    },
+
+    /**
+     * Performs a clipboard search with the given search needle.
+     *
+     * @param {String} needle
+     */
+    searchClipboard(needle) {
+      db.items.where('text').startsWithIgnoreCase(needle).count((count) => {
+        vm.searchItemCount = count;
+      });
+
+      db.items
+        .where('text').startsWithIgnoreCase(needle)
+        .reverse()
+        .offset(9 * vm.currentSearchPage)
+        .limit(9)
+        .sortBy('id')
+        .then((items) => {
+          vm.searchResults = [];
+
+          items.forEach((item) => vm.searchResults.push(item.text));
+        });
+    },
   },
 
   /**
@@ -289,19 +342,7 @@ const vm = new Vue({
 
 vm.$watch('query', (value) => {
   if (value.length > 0) {
-    db.items.where('text').startsWithIgnoreCase(value).count((count) => {
-      vm.searchItemCount = count;
-    });
-
-    db.items
-      .where('text').startsWithIgnoreCase(value)
-      .reverse()
-      .offset(9 * vm.currentSearchPage)
-      .limit(9)
-      .sortBy('id')
-      .then((items) => {
-        items.forEach((item) => vm.searchResults.push(item.text));
-      });
+    vm.searchClipboard(value);
   } else {
     vm.searchResults = [];
     vm.currentSearchPage = 0;
