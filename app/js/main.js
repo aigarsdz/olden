@@ -113,7 +113,8 @@ const vm = new Vue({
      * the list.
      */
     copyItem() {
-      const clipboardItem = this.clipboardContent.splice(this.selectionIndex, 1)[0];
+      const collection    = this.query.length === 0 ? 'clipboardContent' : 'searchResults';
+      const clipboardItem = this[collection].splice(this.selectionIndex, 1)[0];
 
       db.items
         .where('text').equals(clipboardItem)
@@ -126,7 +127,9 @@ const vm = new Vue({
           this.openPage(0, () => {
             clipboard.writeText(clipboardItem);
 
-            this.selectionIndex = -1;
+            this.selectionIndex    = -1;
+            this.query             = '';
+            this.currentSearchPage =  0;
 
             this.hideWindow();
           });
@@ -155,7 +158,6 @@ const vm = new Vue({
      * selection is moved to the bottom of the list.
      */
     selectPrevious() {
-      console.log(this.query);
       if (this.selectionIndex === 0) {
         this.selectionIndex = this.clipboardContent.length - 1;
       } else {
@@ -217,7 +219,6 @@ const vm = new Vue({
     fetch('https://api.github.com/repos/aigarsdz/olden/releases/latest')
       .then((response) => { return response.json() })
       .then((data) => {
-          console.log(data);
         if (data.tag_name && data.tag_name != `v${packageInfo.version}`) {
           data.assets.forEach((asset) => {
             this.offerMacOSUpdate(asset.browser_download_url);
