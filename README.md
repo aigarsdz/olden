@@ -19,7 +19,7 @@ not only become an important tool for me on Windows but also replaced CopyClip o
 
 Go to [releases](https://github.com/aigarsdz/olden/releases) section and download the file that fits
 your OS. For MacOS it's dmg, for Windows - zip. I haven't provided a Linux package because I need to do more
-testing and research on it, but it will be available in the next release. I also haven't made a Windows
+testing and research on it, but it will be available in the next minor release. I also haven't made a Windows
 installer because it requires a code signing certificate, so I postponed it for a while. I will add
 it alongside auto updater at some point.
 
