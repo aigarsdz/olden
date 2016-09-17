@@ -54,3 +54,9 @@ files to the app folder. App packaging is done using npm run `package_macos` for
 - [rimraf](https://github.com/isaacs/rimraf "isaacs/rimraf: A `rm -rf` util for nodejs")
 - [mocha](https://github.com/mochajs/mocha "mochajs/mocha: simple, flexible, fun javascript test framework for node.js & the browser")
 - [spectron](https://github.com/electron/spectron "electron/spectron: Test Electron apps using ChromeDriver")
+
+## Icon design
+
+I made all the icons myself, but I am not a designer so their quality is arguable 😄. If you're
+a designer and you like Olden it would be great if you could contribute by improving those icons
+or making new ones.
