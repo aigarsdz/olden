@@ -14,7 +14,7 @@
       <img src="./img/ic_search_white_24px.svg" alt="Search">
       <input type="text" v-model="query" autofocus>
 
-      <div v-if="searchResults.length === 0">
+      <div v-if="query.length === 0">
         <div v-for="(index, item) in clipboardContent"
             v-bind:class="{ selected: index == selectionIndex }">{{item.substring(0, 50)}}</div>
         <div class="pagination">
