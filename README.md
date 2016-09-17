@@ -27,7 +27,7 @@ it alongside auto updater at some point.
 
 I have borrowed a lot from CopyClip. Right now you can open it using `Alt+Space` keyboard shortcut.
 Use left/right keys to navigate through the history, up/down keys to highlight a specific item and
-enter key to select it.
+enter key to select it. Type in the search field to look for specific items in the clipboard history.
 
 A demo is coming soon.   
 
