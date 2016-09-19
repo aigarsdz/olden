@@ -11,7 +11,8 @@ const {
   dialog,
   shell } = require('electron');
 
-const path = require('path');
+const path     = require('path');
+const platform = require('os').platform();
 
 let mainWindow    = null;
 let tray          = null;
@@ -54,7 +55,11 @@ app.on('ready', () => {
     }
   });
 
-  tray = new Tray(path.join(__dirname, 'img', 'tray_icon_black_18.png'));
+  if (platform === 'darwin') {
+    tray = new Tray(path.join(__dirname, 'img', 'iconTemplate.png'));
+  } else {
+    tray = new Tray(path.join(__dirname, 'img', 'iconHighlight.png'));
+  }
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Clear clipboard history', click(item, focusedWindow) {
