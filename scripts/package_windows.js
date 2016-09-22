@@ -12,7 +12,9 @@ packager({
   ignore:   '.DS_Store',
   out:      path.join(__dirname, '..', 'dist'),
   platform: 'win32',
-  version:  '1.3.5'
+  version:  '1.4.1',
+  asar:     true,
+  name:     'Olden'
 }, function(err, appPaths) {
   if (err) {
     console.log(err);

@@ -1,5 +1,5 @@
 {
-  "name": "Olden",
+  "name": "olden",
   "version": "0.1.2",
   "main": "./app/main.js",
   "scripts": {
