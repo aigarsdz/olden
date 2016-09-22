@@ -5,9 +5,10 @@
   "scripts": {
     "start": "./node_modules/.bin/electron app",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "build": "node scripts/build.js && npm i --only=prod --prefix ./app",
+    "build": "node scripts/build.js && npm i --only=prod --prefix ./app --no-optional",
     "package_macos": "node scripts/package_macos.js",
     "package_win": "node scripts/package_windows.js",
+    "package": "npm run package_macos && npm run package_win",
     "bootstrap": "npm i -g bower && npm i"
   },
   "dependencies": {
