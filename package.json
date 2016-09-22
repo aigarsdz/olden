@@ -1,6 +1,6 @@
 {
   "name": "olden",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "./app/main.js",
   "scripts": {
     "start": "./node_modules/.bin/electron app",
