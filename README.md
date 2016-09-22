@@ -37,12 +37,11 @@ You will have to have Node and NPM installed in order to develop Olden.
 
 In most of Node projects you can just run `npm i` to install all the dependencies, but the
 project structure of Olden is a bit more complicated and it uses 2 package.json files, therefore,
-to set everything up in the correct way, run `npm run bootstrap`. After that run `bower install`
-to install [Vue.js](https://vuejs.org "vue.js"), which is used for rendering.
+to set everything up in the correct way, run `npm run bootstrap`.
 
 When you're done making your changes to the project, run `npm run build` to copy all the necessary
-files to the app folder. App packaging is done using npm run `package_macos` for MacOS and
-`npm package_win` for Windows.
+files to the app folder and `npm start` to test the app. App packaging is done using npm run `package_macos` for MacOS and
+`npm package_win` for Windows or `npm package` for both.
 
 ### Node dependencies
 
