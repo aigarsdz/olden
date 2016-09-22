@@ -11,8 +11,7 @@ const {
   dialog,
   shell } = require('electron');
 
-const path     = require('path');
-const platform = require('os').platform();
+const path = require('path');
 
 let mainWindow    = null;
 let tray          = null;
@@ -55,7 +54,7 @@ app.on('ready', () => {
     }
   });
 
-  if (platform === 'darwin') {
+  if (process.platform === 'darwin') {
     tray = new Tray(path.join(__dirname, 'img', 'iconTemplate.png'));
   } else {
     tray = new Tray(path.join(__dirname, 'img', 'iconHighlight.png'));
