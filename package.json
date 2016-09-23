@@ -9,7 +9,7 @@
     "package_macos": "node scripts/package_macos.js",
     "package_win": "node scripts/package_windows.js",
     "package_linux": "node scripts/package_linux.js",
-    "package": "npm run package_macos && npm run package_win && package_linux",
+    "package": "npm run package_macos && npm run package_win && npm run package_linux",
     "bootstrap": "npm i"
   },
   "dependencies": {
