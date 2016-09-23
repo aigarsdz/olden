@@ -4,5 +4,6 @@ node_modules
 *.log*
 app/package.json
 app/js/vue.min.js
+app/img/app_icon.png
 .vscode
 dist/Olden-*

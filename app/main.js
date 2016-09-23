@@ -32,7 +32,8 @@ app.on('ready', () => {
     center: true,
     skipTaskbar: true,
     show: false,
-    title: 'Olden'
+    title: 'Olden',
+    icon: path.join(__dirname, 'img', 'app_icon.png')
   });
 
   // The trigger used to show/hide the app window.
@@ -56,6 +57,8 @@ app.on('ready', () => {
 
   if (process.platform === 'darwin') {
     tray = new Tray(path.join(__dirname, 'img', 'iconTemplate.png'));
+  } else if (process.platform === 'linux') {
+    tray = new Tray(path.join(__dirname, 'img', 'iconHighlight@2x.png'));
   } else {
     tray = new Tray(path.join(__dirname, 'img', 'iconHighlight.png'));
   }
