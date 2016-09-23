@@ -23,6 +23,9 @@ testing and research on it, but it will be available in the next minor release. 
 installer because it requires a code signing certificate, so I postponed it for a while. I will add
 it alongside auto updater at some point.
 
+**Important.** On Linux you need libappindicator1 package to be installed (at least on Ubuntu 16.04.1)
+in order for tray icon to work.
+
 ## Usage
 
 I have borrowed a lot from CopyClip. Right now you can open it using `Alt+Space` keyboard shortcut.
