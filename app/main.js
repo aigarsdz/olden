@@ -32,7 +32,7 @@ app.on('ready', () => {
     center: true,
     skipTaskbar: true,
     show: false,
-    title: 'Brownie'
+    title: 'Olden'
   });
 
   // The trigger used to show/hide the app window.
