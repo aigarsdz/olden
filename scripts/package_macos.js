@@ -5,6 +5,34 @@ const path        = require('path');
 const exec        = require('child_process').exec;
 const packageInfo = require(path.join(__dirname, '..', 'package.json'));
 
+function createDMG(appPaths) {
+  var dmgCreator = appdmg({
+    source: path.join(__dirname, '..', 'appdmg.json'),
+    target: path.join(__dirname, '..', 'dist', `Olden-${packageInfo.version}.dmg`)
+  });
+
+  dmgCreator.on('progress', (info) => {
+    if (info.type === 'step-begin') {
+      const line = `[ ${info.current}/${info.total} ] ${info.title}...`;
+
+      process.stdout.write(line + ' '.repeat(45 - line.length));
+    }
+
+    if (info.type === 'step-end') {
+      process.stdout.write(`[ ${info.status} ]\n`);
+    }
+  });
+
+  dmgCreator.on('finish', () => {
+    console.log(`\nPackage created in dist/Olden-${packageInfo.version}.dmg\n`);
+    appPaths.forEach((p) => rimraf(p, () => {}));
+  });
+
+  dmgCreator.on('error', (err) => {
+    console.log(`\n${err}\n`);
+  });
+}
+
 if (process.platform === 'darwin') {
   packager({
     dir:      path.join(__dirname, '..', 'app'),
@@ -33,33 +61,11 @@ if (process.platform === 'darwin') {
                   console.log(stderr);
                 }
 
-                dmgCreator = appdmg({
-                  source: path.join(__dirname, '..', 'appdmg.json'),
-                  target: path.join(__dirname, '..', 'dist', `Olden-${packageInfo.version}.dmg`)
-                });
-
-                dmgCreator.on('progress', (info) => {
-                  if (info.type === 'step-begin') {
-                    const line = `[ ${info.current}/${info.total} ] ${info.title}...`;
-
-                    process.stdout.write(line + ' '.repeat(45 - line.length));
-                  }
-
-                  if (info.type === 'step-end') {
-                    process.stdout.write(`[ ${info.status} ]\n`);
-                  }
-                });
-
-                dmgCreator.on('finish', () => {
-                  console.log(`\nPackage created in dist/Olden-${packageInfo.version}.dmg\n`);
-                  appPaths.forEach((p) => rimraf(p, () => {}));
-                });
-
-                dmgCreator.on('error', (err) => {
-                  console.log(`\n${err}\n`);
-                });
+                createDMG(appPaths);
               });
           });
+        } else {
+          createDMG(appPaths);
         }
       }
     }
