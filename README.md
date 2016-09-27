@@ -43,8 +43,8 @@ project structure of Olden is a bit more complicated and it uses 2 package.json 
 to set everything up in the correct way, run `npm run bootstrap`.
 
 When you're done making your changes to the project, run `npm run build` to copy all the necessary
-files to the app folder and `npm start` to test the app. App packaging is done using npm run `package_macos` for MacOS and
-`npm package_win` for Windows or `npm package` for both.
+files to the app folder and `npm start` to test the app. App packaging is done using `npm run package_macos` for MacOS,
+`npm run package_win` for Windows and `npm rub package_linux` for linux or `npm run package` for both.
 
 ### Node dependencies
 
