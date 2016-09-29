@@ -219,7 +219,7 @@ const vm = new Vue({
      */
     offerWin64Update(updateUrl) {
       if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'AMD64' &&
-          updateUrl.indexOf('x64') !== -1) {
+          updateUrl.indexOf('win32-x64') !== -1) {
 
         ipcRenderer.send('offer-update', { url: updateUrl });
       }
@@ -234,7 +234,37 @@ const vm = new Vue({
      */
     offerWin32Update(updateUrl) {
       if (process.platform === 'win32' && process.env.PROCESSOR_ARCHITECTURE === 'x86' &&
-          updateUrl.indexOf('ia32') !== -1) {
+          updateUrl.indexOf('win32-ia32') !== -1) {
+
+        ipcRenderer.send('offer-update', { url: updateUrl });
+      }
+    },
+
+    /**
+     * Checks if the app is running on 32bit Linux and the asset points to a
+     * 32bit ZIP archive and offers to download a 32bit Linux update if the
+     * comdisions are met.
+     *
+     * @param {String} updateUrl
+     */
+    offerLinux32Update(updateUrl) {
+      if (process.platform === 'linux' && process.env.PROCESSOR_ARCHITECTURE === 'x86' &&
+          updateUrl.indexOf('linux-ia32') !== -1) {
+
+        ipcRenderer.send('offer-update', { url: updateUrl });
+      }
+    },
+
+    /**
+     * Checks if the app is running on 64bit Linux and the asset points to a
+     * 64bit ZIP archive and offers to download a 64bit Linux update if the
+     * comdisions are met.
+     *
+     * @param {String} updateUrl
+     */
+    offerLinux64Update(updateUrl) {
+      if (process.platform === 'linux' && process.env.PROCESSOR_ARCHITECTURE === 'AMD64' &&
+          updateUrl.indexOf('linux-x64') !== -1) {
 
         ipcRenderer.send('offer-update', { url: updateUrl });
       }
