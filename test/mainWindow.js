@@ -1,5 +1,11 @@
 const Application = require('spectron').Application;
 const assert      = require('assert');
+const robot       = require('robotjs');
+
+const KEYBOARD_KEYS = {
+  arrowDown: '\uE015',
+  enter:     '\uE007'
+};
 
 describe('application launch', function() {
   this.timeout(10000);
@@ -32,12 +38,10 @@ describe('application launch', function() {
   });
 
   it('shows the main window when alt+space shortcut is executed', function() {
-    var app = this.app;
+    robot.keyTap('space', 'alt');
 
-    return app.client.keys([ 'AltLeft', 'Space' ]).then(function() {
-      app.browserWindow.isVisible().then(function(visible) {
-        assert.ok(visible);
-      });
+    return this.app.browserWindow.isVisible().then(function(visible) {
+      assert.ok(visible);
     });
   });
 
@@ -50,11 +54,11 @@ describe('application launch', function() {
   it('stores every item added to the clipboard', function() {
     var app = this.app;
 
-    return app.electron.clipboard.writeText('Item 1')
-      .electron.clipboard.writeText('Item 2')
-      .electron.clipboard.writeText('Item 3')
-      .then(function(clipboardText) {
-        app.client.getText('#app > div > div').then(function(clipboardItems) {
+    return app.electron.clipboard.writeText('Item 1').pause(1000)
+      .electron.clipboard.writeText('Item 2').pause(1000)
+      .electron.clipboard.writeText('Item 3').pause(1000)
+      .then(function() {
+        return app.client.getText('#app > div > div').then(function(clipboardItems) {
           assert.ok(clipboardItems.includes('Item 1'));
           assert.ok(clipboardItems.includes('Item 2'));
           assert.ok(clipboardItems.includes('Item 3'));
@@ -65,20 +69,48 @@ describe('application launch', function() {
   it('allows to navigate between clipboard items', function() {
      var app = this.app;
 
-     return app.client.keys([ 'ArrowDown', 'ArrowDown' ]).then(function() {
-       app.client.getHTML('#app > div > div').then(function(clipboardItems) {
-         assert.equal(clipboardItems[2], '<div class="selected">Item 1</div>');
-       });
+     return app.client.keys([ KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown ])
+      .then(function() {
+        return app.client.getHTML('#app > div > div').then(function(clipboardItems) {
+          assert.ok(clipboardItems.includes('<div class="selected">Item 2</div>'));
+        });
      });
   });
 
   it('allows to select a clipboard item from the history', function() {
     var app = this.app;
 
-    return app.client.keys([ 'ArrowDown', 'ArrowDown', 'Enter' ]).then(function() {
-       app.electron.clipboard.readText().then(function(clipboardText) {
-         assert.equal(clipboardText, 'Item 1');
-       });
+    return app.client.keys([
+      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).then(function() {
+        return app.electron.clipboard.readText().then(function(clipboardText) {
+          assert.equal(clipboardText, 'Item 3');
+        });
      });
   });
-});
+
+  it('hides the main window when an item is selected', function() {
+    var app = this.app;
+
+    robot.keyTap('space', 'alt');
+
+    return app.client.pause(500).keys([
+      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).pause(500)
+        .then(function() {
+          return app.browserWindow.isVisible().then(function(visible) {
+            assert.equal(visible, false);
+          });
+    });
+  });
+
+  it('moves the selected item to the top of the list', function() {
+    var app = this.app;
+
+    return app.client.keys([
+      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).pause(500)
+        .then(function() {
+          return app.client.getText('#app > div > div').then(function name(clipboardItems) {
+            assert.equal(clipboardItems[0], 'Item 1');
+          });
+        });
+  });
+});  

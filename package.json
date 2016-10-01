@@ -25,6 +25,7 @@
     "electron-packager": "^8.0.0",
     "mocha": "^3.0.2",
     "rimraf": "^2.5.4",
+    "robotjs": "^0.4.4",
     "spectron": "^3.3.0"
   }
 }
