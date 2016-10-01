@@ -79,7 +79,7 @@ app.on('ready', () => {
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.setVisibleOnAllWorkspaces(true);
   // TODO: execute the line below based on the input argument value.
-  // mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   ipcMain.on('hideWindow', (event) => {
     if (app.hide) {
