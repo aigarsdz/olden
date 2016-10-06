@@ -38,13 +38,16 @@ A demo is coming soon.   
 
 You will have to have Node and NPM installed in order to develop Olden.
 
-In most of Node projects you can just run `npm i` to install all the dependencies, but the
-project structure of Olden is a bit more complicated and it uses 2 package.json files, therefore,
-to set everything up in the correct way, run `npm run bootstrap`.
-
-When you're done making your changes to the project, run `npm run build` to copy all the necessary
-files to the app folder and `npm start` to test the app. App packaging is done using `npm run package_macos` for MacOS,
-`npm run package_win` for Windows and `npm rub package_linux` for linux or `npm run package` for both.
+- Install everything using `npm run bootstrap`.
+- Make some changes (hopefully useful).
+- Copy necessary files to app folder using `npm run build`.
+- Run the tests using `npm test`.
+- Run the app using `npm start`.
+- Package app:
+  - `npm run package_macos` for MacOS
+  - `npm run package_win` for Windows
+  - `npm run package_linux` for Linux
+  - `npm run package` for all
 
 ### Node dependencies
 
