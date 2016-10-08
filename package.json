@@ -3,7 +3,7 @@
   "version": "0.1.3",
   "main": "./app/main.js",
   "scripts": {
-    "start": "./node_modules/.bin/electron app",
+    "start": "./node_modules/.bin/electron app --dev",
     "test": "./node_modules/.bin/mocha --reporter spec",
     "build": "./node_modules/.bin/bower install && node scripts/build.js && npm i --only=prod --prefix ./app --no-optional",
     "package_macos": "node scripts/package_macos.js",
