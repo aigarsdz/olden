@@ -16,7 +16,7 @@
 
       <div v-if="query.length === 0">
         <div v-for="(index, item) in clipboardContent"
-            v-bind:class="{ selected: index == selectionIndex }">{{item.substring(0, 50)}}</div>
+            v-bind:class="{ selected: index == selectionIndex, item: true }">{{item.substring(0, 50)}}</div>
         <div class="pagination">
           <div>
             <img src="./img/ic_keyboard_arrow_left_black_24px.svg"
@@ -35,7 +35,7 @@
 
       <div v-else>
         <div v-for="(index, item) in searchResults"
-            v-bind:class="{ selected: index == selectionIndex }">{{item.substring(0, 50)}}</div>
+            v-bind:class="{ selected: index == selectionIndex, item: true }">{{item.substring(0, 50)}}</div>
         <div class="pagination">
           <div>
             <img src="./img/ic_keyboard_arrow_left_black_24px.svg"

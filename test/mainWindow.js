@@ -10,7 +10,7 @@ const KEYBOARD_KEYS = {
 describe('application launch', function() {
   this.timeout(10000);
 
-  beforeEach(function() {
+  before(function() {
     this.app = new Application({
       path: './node_modules/.bin/electron',
       args: [ 'app' ]
@@ -19,7 +19,7 @@ describe('application launch', function() {
     return this.app.start();
   })
 
-  afterEach(function() {
+  after(function() {
     if (this.app && this.app.isRunning()) {
       return this.app.stop();
     }
@@ -46,7 +46,7 @@ describe('application launch', function() {
   });
 
   it('contains at least one clipboard item when launched', function() {
-    return this.app.client.getText('#app > div > div').then(function(clipboardItems) {
+    return this.app.client.getText('#app > div > div.item').then(function(clipboardItems) {
       assert.ok(clipboardItems.length > 0);
     });
   });
@@ -58,7 +58,7 @@ describe('application launch', function() {
       .electron.clipboard.writeText('Item 2').pause(1000)
       .electron.clipboard.writeText('Item 3').pause(1000)
       .then(function() {
-        return app.client.getText('#app > div > div').then(function(clipboardItems) {
+        return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
           assert.ok(clipboardItems.includes('Item 1'));
           assert.ok(clipboardItems.includes('Item 2'));
           assert.ok(clipboardItems.includes('Item 3'));
@@ -71,8 +71,8 @@ describe('application launch', function() {
 
      return app.client.keys([ KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown ])
       .then(function() {
-        return app.client.getHTML('#app > div > div').then(function(clipboardItems) {
-          assert.ok(clipboardItems.includes('<div class="selected">Item 2</div>'));
+        return app.client.getHTML('#app > div > div.item').then(function(clipboardItems) {
+          assert.ok(clipboardItems.includes('<div class="item selected">Item 2</div>'));
         });
      });
   });
@@ -80,12 +80,11 @@ describe('application launch', function() {
   it('allows to select a clipboard item from the history', function() {
     var app = this.app;
 
-    return app.client.keys([
-      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).then(function() {
-        return app.electron.clipboard.readText().then(function(clipboardText) {
-          assert.equal(clipboardText, 'Item 3');
-        });
-     });
+    return app.client.keys([ KEYBOARD_KEYS.enter ]).pause(1000).then(function() {
+      return app.electron.clipboard.readText().then(function(clipboardText) {
+        assert.equal(clipboardText, 'Item 2');
+      });
+    });
   });
 
   it('hides the main window when an item is selected', function() {
@@ -94,23 +93,38 @@ describe('application launch', function() {
     robot.keyTap('space', 'alt');
 
     return app.client.pause(500).keys([
-      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).pause(500)
-        .then(function() {
-          return app.browserWindow.isVisible().then(function(visible) {
-            assert.equal(visible, false);
-          });
+      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter
+    ]).pause(1000).then(function() {
+      return app.browserWindow.isVisible().then(function(visible) {
+        assert.equal(visible, false);
+      });
     });
   });
 
   it('moves the selected item to the top of the list', function() {
     var app = this.app;
 
+    robot.keyTap('space', 'alt');
+
     return app.client.keys([
-      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter ]).pause(500)
-        .then(function() {
-          return app.client.getText('#app > div > div').then(function name(clipboardItems) {
-            assert.equal(clipboardItems[0], 'Item 1');
-          });
-        });
+      KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter
+    ]).pause(1000).then(function() {
+      return app.client.getText('#app > div > div.item').then(function name(clipboardItems) {
+        assert.equal(clipboardItems[0], 'Item 2');
+        app.client.pause(1000);
+      });
+    });
+  });
+
+  it('allows to search in clipboard history and displays only the items that match', function() {
+    var app = this.app;
+
+    robot.keyTap('space', 'alt');
+
+    return app.client.keys([ 'Item' ]).pause(1500).then(function() {
+      return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
+        assert.equal(clipboardItems.length, 3);
+      });
+    });
   });
 });  
