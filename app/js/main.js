@@ -105,8 +105,26 @@ const vm = new Vue({
       this.loadClipboard(callback);
     },
 
+    /**
+     * Deletes item from the clipboard history.
+     */
     deleteItem() {
-      // TODO: implement delete functionality for a single item.
+      if (this.selectionIndex !== -1) {
+        const collection    = this.query.length === 0 ? 'clipboardContent' : 'searchResults';
+        const clipboardItem = this[collection].splice(this.selectionIndex, 1)[0];
+
+        db.items.where('text').equals(clipboardItem).delete().then((count) => {
+          this.selectionIndex    = -1;
+          this.currentPage       = 0;
+          this.currentSearchPage = 0;
+
+          if (this.query.length > 0) {
+            this.searchClipboard(this.query);
+          } else {
+            this.loadClipboard();
+          }
+        });
+      }
     },
 
     /**
