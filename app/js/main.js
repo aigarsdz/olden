@@ -331,6 +331,7 @@ const vm = new Vue({
       }).catch((err) => console.log(err));
 
     document.addEventListener('keydown', (e) => {
+      console.log(e.keyCode);
       if (keyActionMap[e.keyCode]) {
         this[keyActionMap[e.keyCode]]();
       }
