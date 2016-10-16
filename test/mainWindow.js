@@ -54,11 +54,13 @@ describe('application launch', function() {
   it('stores every item added to the clipboard', function() {
     var app = this.app;
 
-    return app.electron.clipboard.writeText('Item 1').pause(1000)
+    return app.electron.clipboard.writeText('Text to search').pause(1000)
+      .electron.clipboard.writeText('Item 1').pause(1000)
       .electron.clipboard.writeText('Item 2').pause(1000)
       .electron.clipboard.writeText('Item 3').pause(1000)
       .then(function() {
         return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
+          assert.ok(clipboardItems.includes('Text to search'));
           assert.ok(clipboardItems.includes('Item 1'));
           assert.ok(clipboardItems.includes('Item 2'));
           assert.ok(clipboardItems.includes('Item 3'));
@@ -121,7 +123,7 @@ describe('application launch', function() {
 
     robot.keyTap('space', 'alt');
 
-    return app.client.keys([ 'Item' ]).pause(1500).then(function() {
+    return app.client.keys([ 'Text to search' ]).pause(1500).then(function() {
       return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
         assert.equal(clipboardItems.length, 3);
       });

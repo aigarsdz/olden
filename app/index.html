@@ -12,7 +12,7 @@
 
     <main id="app">
       <img src="./img/ic_search_white_24px.svg" alt="Search">
-      <input type="text" v-model="query" autofocus>
+      <input type="text" v-model="query" autofocus class="mousetrap">
 
       <div v-if="query.length === 0">
         <div v-for="(index, item) in clipboardContent"

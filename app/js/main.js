@@ -2,29 +2,12 @@ const {ipcRenderer, clipboard} = require('electron');
 const path                     = require('path');
 const packageInfo              = require(path.join(__dirname, 'package.json'));
 
-const KEY_DEL   = 8;
-const KEY_ENTER = 13;
-const KEY_ESC   = 27;
-const KEY_LEFT  = 37;
-const KEY_UP    = 38;
-const KEY_RIGHT = 39;
-const KEY_DOWN  = 40;
-
 const Dexie = require('dexie');
 const db = new Dexie('clipboard');
-const keyActionMap = {};
 
 db.version(1).stores({
   items: '++id, &text, favorite'
 });
-
-keyActionMap[KEY_DEL]   = 'deleteItem';
-keyActionMap[KEY_ENTER] = 'copyItem';
-keyActionMap[KEY_ESC]   = 'hideWindow';
-keyActionMap[KEY_LEFT]  = 'openPreviousPage';
-keyActionMap[KEY_UP]    = 'selectPrevious';
-keyActionMap[KEY_RIGHT] = 'openNextPage';
-keyActionMap[KEY_DOWN]  = 'selectNext';
 
 const vm = new Vue({
   el: '#app',
@@ -106,6 +89,13 @@ const vm = new Vue({
     },
 
     /**
+     * Hides app window.
+     */
+    hideWindow() {
+      ipcRenderer.send('hideWindow');
+    },
+
+    /**
      * Deletes item from the clipboard history.
      */
     deleteItem() {
@@ -153,67 +143,6 @@ const vm = new Vue({
             this.hideWindow();
           });
         });
-    },
-
-    /**
-     * Hides app window.
-     */
-    hideWindow() {
-      ipcRenderer.send('hideWindow');
-    },
-
-    /**
-     * Loads newer set of clipboard items into the view. Doesn't do anything
-     * if we are on the first page already.
-     */
-    openPreviousPage() {
-      if (this.query.length === 0) {
-        if (this.currentPage > 0) {
-          this.openPage(this.currentPage - 1);
-        }
-      } else {
-        this.currentSearchPage--;
-        this.searchClipboard(this.query);
-      }
-    },
-
-    /**
-     * Moves selection up one item. If we are already on the top item the
-     * selection is moved to the bottom of the list.
-     */
-    selectPrevious() {
-      if (this.selectionIndex === 0) {
-        this.selectionIndex = this.clipboardContent.length - 1;
-      } else {
-        this.selectionIndex--;
-      }
-    },
-
-    /**
-     * Loads older set of clipboard items into the view. Doesn't do anything
-     * if we are on the last page already.
-     */
-    openNextPage() {
-      if (this.query.length === 0) {
-        if ((Math.ceil(this.clipboardItemCount / 9)) > this.currentPage + 1) {
-          this.openPage(this.currentPage + 1);
-        }
-      } else {
-        this.currentSearchPage++;
-        this.searchClipboard(this.query);
-      }
-    },
-
-    /**
-     * Moves selection down one item. If we are already on the bottom item the
-     * selection is moved to the top of the list.
-     */
-    selectNext() {
-      if (this.selectionIndex == this.clipboardContent.length - 1) {
-        this.selectionIndex = 0;
-      } else {
-        this.selectionIndex++;
-      }
     },
 
     /**
@@ -310,6 +239,53 @@ const vm = new Vue({
           items.forEach((item) => vm.searchResults.push(item.text));
         });
     },
+
+    /**
+     * Assigns actions to specifickeyboard events.
+     */
+    initActionKeys() {
+      Mousetrap.bind('up', () => {
+        if (this.selectionIndex === 0) {
+          this.selectionIndex = this.clipboardContent.length - 1;
+        } else {
+          this.selectionIndex--;
+        }
+      });
+
+      Mousetrap.bind('right', () => {
+        if (this.query.length === 0) {
+          if ((Math.ceil(this.clipboardItemCount / 9)) > this.currentPage + 1) {
+            this.openPage(this.currentPage + 1);
+          }
+        } else {
+          this.currentSearchPage++;
+          this.searchClipboard(this.query);
+        }
+      });
+
+      Mousetrap.bind('down', () => {
+        if (this.selectionIndex == this.clipboardContent.length - 1) {
+          this.selectionIndex = 0;
+        } else {
+          this.selectionIndex++;
+        }
+      });
+
+      Mousetrap.bind('left', () => {
+        if (this.query.length === 0) {
+          if (this.currentPage > 0) {
+            this.openPage(this.currentPage - 1);
+          }
+        } else {
+          this.currentSearchPage--;
+          this.searchClipboard(this.query);
+        }
+      });
+
+      Mousetrap.bind('esc', this.hideWindow);
+      Mousetrap.bind('enter', this.copyItem);
+      Mousetrap.bind('command+backspace', this.deleteItem);
+    }
   },
 
   /**
@@ -330,12 +306,7 @@ const vm = new Vue({
         }
       }).catch((err) => console.log(err));
 
-    document.addEventListener('keydown', (e) => {
-      console.log(e.keyCode);
-      if (keyActionMap[e.keyCode]) {
-        this[keyActionMap[e.keyCode]]();
-      }
-    });
+      this.initActionKeys();
 
     db.items.where('favorite').equals(0).count((count) => {
       this.clipboardItemCount = count;
