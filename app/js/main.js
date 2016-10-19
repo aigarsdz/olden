@@ -284,7 +284,12 @@ const vm = new Vue({
 
       Mousetrap.bind('esc', this.hideWindow);
       Mousetrap.bind('enter', this.copyItem);
-      Mousetrap.bind('command+backspace', this.deleteItem);
+
+      if (process.platform === 'darwin') {
+        Mousetrap.bind('command+backspace', this.deleteItem);
+      } else {
+        Mousetrap.bind('ctrl+backspace', this.deleteItem);
+      }
     }
   },
 
