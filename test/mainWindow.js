@@ -4,7 +4,8 @@ const robot       = require('robotjs');
 
 const KEYBOARD_KEYS = {
   arrowDown: '\uE015',
-  enter:     '\uE007'
+  enter:     '\uE007',
+  backspace: '\uE003'
 };
 
 describe('application launch', function() {
@@ -108,7 +109,7 @@ describe('application launch', function() {
 
     robot.keyTap('space', 'alt');
 
-    return app.client.keys([
+    return app.client.pause(500).keys([
       KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.arrowDown, KEYBOARD_KEYS.enter
     ]).pause(1000).then(function() {
       return app.client.getText('#app > div > div.item').then(function name(clipboardItems) {
@@ -119,13 +120,43 @@ describe('application launch', function() {
   });
 
   it('allows to search in clipboard history and displays only the items that match', function() {
-    var app = this.app;
+    var app = this.app,
+        searchText = 'Text to search';
+
+    return app.client.pause(500).keys([ searchText ]).pause(1500).then(function() {
+      return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
+        assert.equal(clipboardItems.length, 3);
+        app.client.keys(deleteSequence).pause(500);
+      });
+    });
+  });
+
+  it('allows to delete items from the history', function() {
+    var app         = this.app,
+        modifierKey = process.platform === 'darwin' ? 'command' : 'control';
 
     robot.keyTap('space', 'alt');
 
-    return app.client.keys([ 'Text to search' ]).pause(1500).then(function() {
-      return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
-        assert.equal(clipboardItems.length, 3);
+    return app.client.pause(1000).keys([ KEYBOARD_KEYS.arrowDown ]).then(function() {
+      robot.keyTap('backspace', modifierKey);
+
+      return app.client.pause(1000).keys([ KEYBOARD_KEYS.arrowDown ]).then(function() {
+        robot.keyTap('backspace', modifierKey);
+
+        return app.client.pause(1000).keys([ KEYBOARD_KEYS.arrowDown ]).then(function() {
+          robot.keyTap('backspace', modifierKey);
+
+          return app.client.pause(1000).keys([ KEYBOARD_KEYS.arrowDown ]).then(function() {
+            robot.keyTap('backspace', modifierKey);
+
+            return app.client.pause(1000).getText('#app > div > div.item').then(function(clipboardItems) {
+              assert.ok(!clipboardItems.includes('Item 1'));
+              assert.ok(!clipboardItems.includes('Item 2'));
+              assert.ok(!clipboardItems.includes('Item 3'));
+              assert.ok(!clipboardItems.includes('Text to search'));
+            });
+          });
+        });
       });
     });
   });
