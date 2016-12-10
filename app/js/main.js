@@ -364,7 +364,7 @@ const vm = new Vue({
     });
 
     ipcRenderer.on('exportClipboardHistory', () => {
-      // TODO: export all database data as JSON.
+      db.items.toArray().then((items) => ipcRenderer.send('saveExportedData', { items: items }));
     });
   }
 });

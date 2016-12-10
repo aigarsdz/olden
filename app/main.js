@@ -12,6 +12,7 @@ const {
   shell } = require('electron');
 
 const path = require('path');
+const fs   = require('fs');
 
 let mainWindow    = null;
 let tray          = null;
@@ -111,6 +112,29 @@ app.on('ready', () => {
         updateOffered = true;
       });
     }
+  });
+
+  ipcMain.on('saveExportedData', (event, data) => {
+    dialog.showSaveDialog(null, {
+      defaultPath: process.env[ (process.platform === 'win32') ? 'USERPROFILE' : 'HOME'],
+      filters: [{ name: 'JSON', extensions: [ 'json' ] }]
+    }, (filename) => {
+      if (filename) {
+        fs.writeFile(filename, JSON.stringify(data.items), 'utf8', (err, data) => {
+          if (err) {
+            // TODO: provide more descriptive error message.
+            dialog.showErrorBox('Export failed', "Couldn't export clipboard history.");
+          } else {
+            dialog.showMessageBox(null, {
+              type:    'info',
+              buttons: [],
+              title:   'Export successful',
+              message: `All clipboard history has been exported to ${filename}`
+            });
+          }
+        });
+      }
+    });
   });
 });
 
