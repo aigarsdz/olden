@@ -64,6 +64,9 @@ app.on('ready', () => {
   }
 
   const contextMenu = Menu.buildFromTemplate([
+    { label: 'Export clipboard history', click(item, focusedWindow) {
+      mainWindow.webContents.send('exportClipboardHistory');
+    }},
     { label: 'Clear clipboard history', click(item, focusedWindow) {
       mainWindow.webContents.send('clearClipboardHistory');
     }},

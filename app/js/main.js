@@ -362,6 +362,10 @@ const vm = new Vue({
         this.openPage(0);
       });
     });
+
+    ipcRenderer.on('exportClipboardHistory', () => {
+      // TODO: export all database data as JSON.
+    });
   }
 });
 
