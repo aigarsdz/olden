@@ -126,7 +126,7 @@ describe('application launch', function() {
     return app.client.pause(500).keys([ searchText ]).pause(1500).then(function() {
       return app.client.getText('#app > div > div.item').then(function(clipboardItems) {
         assert.equal(clipboardItems.length, 3);
-        app.client.keys(deleteSequence).pause(500);
+        app.client.pause(500);
       });
     });
   });
