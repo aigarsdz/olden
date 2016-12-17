@@ -65,9 +65,14 @@ app.on('ready', () => {
   }
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Export clipboard history', click(item, focusedWindow) {
-      mainWindow.webContents.send('exportClipboardHistory');
-    }},
+    { label: 'Export', submenu: [
+      { label: 'JSON', click(item, focusedWindow) {
+        mainWindow.webContents.send('exportClipboardHistoryAsJSON');
+      }},
+      { label: 'Plain text', click(item, focusedWindow) {
+        mainWindow.webContents.send('exportClipboardHistoryAsTXT');
+      }}
+    ]},
     { label: 'Clear clipboard history', click(item, focusedWindow) {
       mainWindow.webContents.send('clearClipboardHistory');
     }},
@@ -116,11 +121,11 @@ app.on('ready', () => {
 
   ipcMain.on('saveExportedData', (event, data) => {
     dialog.showSaveDialog(null, {
-      defaultPath: process.env[ (process.platform === 'win32') ? 'USERPROFILE' : 'HOME'],
-      filters: [{ name: 'JSON', extensions: [ 'json' ] }]
+      defaultPath: process.env[ (process.platform === 'win32') ? 'USERPROFILE' : 'HOME' ],
+      filters: [{ name: 'JSON', extensions: [ data.format ] }]
     }, (filename) => {
       if (filename) {
-        fs.writeFile(filename, JSON.stringify(data.items), 'utf8', (err, data) => {
+        fs.writeFile(filename, data.items, 'utf8', (err, data) => {
           if (err) {
             // TODO: provide more descriptive error message.
             dialog.showErrorBox('Export failed', "Couldn't export clipboard history.");

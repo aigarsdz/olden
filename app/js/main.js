@@ -363,8 +363,19 @@ const vm = new Vue({
       });
     });
 
-    ipcRenderer.on('exportClipboardHistory', () => {
-      db.items.toArray().then((items) => ipcRenderer.send('saveExportedData', { items: items }));
+    ipcRenderer.on('exportClipboardHistoryAsJSON', () => {
+      db.items.toArray().then((items) => {
+        ipcRenderer.send('saveExportedData', { items: JSON.stringify(items), format: 'json' })
+      });
+    });
+
+    ipcRenderer.on('exportClipboardHistoryAsTXT', () => {
+      db.items.toArray().then((items) => {
+        ipcRenderer.send('saveExportedData', {
+          items: items.map((item) => item.text).join('\n'),
+          format: 'txt'
+        })
+      });
     });
   }
 });
