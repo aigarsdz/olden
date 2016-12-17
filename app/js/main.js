@@ -1,6 +1,6 @@
-const {ipcRenderer, clipboard} = require('electron');
-const path                     = require('path');
-const packageInfo              = require(path.join(__dirname, 'package.json'));
+const { ipcRenderer, clipboard } = require('electron');
+const path                       = require('path');
+const packageInfo                = require(path.join(__dirname, 'package.json'));
 
 const Dexie = require('dexie');
 const db = new Dexie('clipboard');
