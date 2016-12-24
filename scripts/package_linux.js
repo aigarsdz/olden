@@ -12,7 +12,7 @@ packager({
   ignore:   '.DS_Store',
   out:      path.join(__dirname, '..', 'dist'),
   platform: 'linux',
-  version:  '1.4.1',
+  version:  '1.4.13',
   asar:     true,
   name:     'Olden'
 }, function(err, appPaths) {

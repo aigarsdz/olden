@@ -41,7 +41,7 @@ if (process.platform === 'darwin') {
     ignore:   '.DS_Store',
     out:      path.join(__dirname, '..', 'dist'),
     platform: 'darwin',
-    version:  '1.4.1',
+    version:  '1.4.13',
     asar:     true,
     name:     'Olden'
   }, function(err, appPaths) {
