@@ -18,10 +18,8 @@ not only become an important tool for me on Windows but also replaced CopyClip o
 ## Installation
 
 Go to [releases](https://github.com/aigarsdz/olden/releases) section and download the file that fits
-your OS. For MacOS it's dmg, for Windows - zip. I haven't provided a Linux package because I need to do more
-testing and research on it, but it will be available in the next minor release. I also haven't made a Windows
-installer because it requires a code signing certificate, so I postponed it for a while. I will add
-it alongside auto updater at some point.
+your OS. For MacOS it's dmg, for Windows - zip. I haven't made a Windows
+installer because it requires a code signing certificate, so I postponed it for a while. I will add it alongside auto updater at some point.
 
 **Important.** On Linux you need libappindicator1 package to be installed (at least on Ubuntu 16.04.1)
 in order for tray icon to work.
@@ -29,8 +27,10 @@ in order for tray icon to work.
 ## Usage
 
 I have borrowed a lot from CopyClip. Right now you can open it using `Alt+Space` keyboard shortcut.
-Use left/right keys to navigate through the history, up/down keys to highlight a specific item and
-enter key to select it. Type in the search field to look for specific items in the clipboard history.
+Use `left/right` keys to navigate through the history, `up/down` keys to highlight a specific item and
+`enter` key to select it. Type in the search field to look for specific items in the clipboard history.
+
+You can delete items using `Cmd+Backspace` (`Ctrl+Backspace`) keyboard shortcut.
 
 A demo is coming soon.   
 
