@@ -160,4 +160,21 @@ describe('application launch', function() {
       });
     });
   });
+
+  it('allows to select the first item without removing it from teh clipboard history', function() {
+    var app  = this.app,
+        item = 'first item';
+
+    return app.electron.clipboard.writeText(item).pause(1500).then(function() {
+      robot.keyTap('space', 'alt');
+
+      return app.client.pause(1000).keys([ KEYBOARD_KEYS.arrowDown ]).then(function() {
+        return app.client.keys([ KEYBOARD_KEYS.enter ]).pause(1000).then(function() {
+          return app.client.pause(1000).getText('#app > div > div.item').then(function(clipboardItems) {
+            assert.ok(clipboardItems.includes(item));
+          });
+        });
+      });
+    });
+  });
 });  
