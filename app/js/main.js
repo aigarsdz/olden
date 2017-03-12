@@ -125,6 +125,13 @@ const vm = new Vue({
       const collection    = this.query.length === 0 ? 'clipboardContent' : 'searchResults';
       const clipboardItem = this[collection].splice(this.selectionIndex, 1)[0];
 
+      // Issue #9. If we select the first item we need to nullify the last
+      // clipboard item stored in memory, otherwise it will just disappear form
+      // clipboard history.
+      if (this.selectionIndex === 0) {
+        this.lastClipboardItem = null;
+      }
+
       db.items
         .where('text').equals(clipboardItem)
         .delete()
